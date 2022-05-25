@@ -2,15 +2,19 @@
   <library name="Gradle: com.google.android.material:material:1.6.0@aar">
     <ANNOTATIONS>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/487037abc1dc850c94c97b15d22321ac/transformed/material-1.6.0/annotations.zip!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../../Program Files/Java/jdk-15.0.2/caches/transforms-3/487037abc1dc850c94c97b15d22321ac/transformed/material-1.6.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/487037abc1dc850c94c97b15d22321ac/transformed/material-1.6.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/487037abc1dc850c94c97b15d22321ac/transformed/material-1.6.0/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/487037abc1dc850c94c97b15d22321ac/transformed/material-1.6.0/res" />
+      <root url="file://$PROJECT_DIR$/../../../../../../Program Files/Java/jdk-15.0.2/caches/transforms-3/487037abc1dc850c94c97b15d22321ac/transformed/material-1.6.0/AndroidManifest.xml" />
+      <root url="file://$PROJECT_DIR$/../../../../../../Program Files/Java/jdk-15.0.2/caches/transforms-3/487037abc1dc850c94c97b15d22321ac/transformed/material-1.6.0/res" />
+      <root url="jar://$PROJECT_DIR$/../../../../../../Program Files/Java/jdk-15.0.2/caches/transforms-3/487037abc1dc850c94c97b15d22321ac/transformed/material-1.6.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.android.material/material/1.6.0/976aa22bd46c7748fade98594298bcd36b92f844/material-1.6.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../../Program Files/Java/jdk-15.0.2/caches/modules-2/files-2.1/com.google.android.material/material/1.6.0/976aa22bd46c7748fade98594298bcd36b92f844/material-1.6.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

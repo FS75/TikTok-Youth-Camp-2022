@@ -1,6 +1,7 @@
 package com.example.taxiapp
 
-import android.location.Geocoder
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.taxiapp.databinding.ActivityMapsBinding
@@ -11,14 +12,27 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import java.io.IOException
-import java.util.*
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var gMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+
+    // Trying to draw sum markers
+    open fun resizeMapIcons(
+        iconName: String?,
+        width: Int,
+        height: Int
+    ): Bitmap? {
+        val imageBitmap = BitmapFactory.decodeResource(
+            resources, resources.getIdentifier(
+                iconName, "drawable",
+                packageName
+            )
+        )
+        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +46,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
-
     override fun onMapReady(googleMap: GoogleMap) {
 
         gMap = googleMap
@@ -43,6 +56,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var lat = 0.0
         var long = 0.0
         var convertedCoord = LatLng(0.0, 0.0)
+
+
 
         for (coords in coordList[0]){
 
@@ -66,7 +81,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     // can convert
                     convertedCoord = LatLng(lat, long)
                     //println(convertedCoord)
-                    gMap.addMarker(MarkerOptions().position(convertedCoord).title("Marker"))
+                    //gMap.addMarker(MarkerOptions().position(convertedCoord).title("Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_local_taxi_24)))
+                    gMap.addMarker(MarkerOptions().position(convertedCoord).title("Taxi")
+                        .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("taxi_icon",150,150))))
+                    //gMap.addMarker(MarkerOptions().position(convertedCoord).title("Taxi"))
                 }
             }
 
@@ -82,17 +100,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             //float   HUE_YELLOW
 
             // currentLocation should change to user's current location when code is up
-
             //var currentLocation = LatLng(1.3732, 103.9493) // Pasir Ris MRT for testing
-
-            var currentLocation = LatLng(userLat, userLong) // current location
-            println("current loc " + currentLocation)
-            gMap.addMarker(MarkerOptions().position(currentLocation).title("UserCurrentLocation")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
-
-            // zoom onto user's current location
-            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))
+//Was inside for loop
+//            var currentLocation = LatLng(userLat, userLong) // current location
+//            var staticLocation = LatLng(1.3040612421100153, 103.83146976185485)
+//            println("current loc " + staticLocation)
+//            gMap.addMarker(MarkerOptions().position(staticLocation).title("UserCurrentLocation")
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+//
+//            // zoom onto user's current location
+//            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(staticLocation, 17F))
         }
+        //Put outside for loop, not sure if will change anything or not
+        var currentLocation = LatLng(userLat, userLong) // current location
+        var staticLocation = LatLng(1.3040612421100153, 103.83146976185485)
+        println("current loc " + staticLocation)
+        gMap.addMarker(MarkerOptions().position(staticLocation).title("UserCurrentLocation")
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+
+        // zoom onto user's current location
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(staticLocation, 17F))
+
     }
+
 
 }

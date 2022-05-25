@@ -4,6 +4,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/dcba5ebfbc6f8c793b6dd1a58145c803/transformed/play-services-places-placereport-17.0.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/dcba5ebfbc6f8c793b6dd1a58145c803/transformed/play-services-places-placereport-17.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/dcba5ebfbc6f8c793b6dd1a58145c803/transformed/play-services-places-placereport-17.0.0/AndroidManifest.xml" />
+      <root url="file://$PROJECT_DIR$/../../../../../../Program Files/Java/jdk-15.0.2/caches/transforms-3/dcba5ebfbc6f8c793b6dd1a58145c803/transformed/play-services-places-placereport-17.0.0/AndroidManifest.xml" />
+      <root url="file://$PROJECT_DIR$/../../../../../../Program Files/Java/jdk-15.0.2/caches/transforms-3/dcba5ebfbc6f8c793b6dd1a58145c803/transformed/play-services-places-placereport-17.0.0/res" />
+      <root url="jar://$PROJECT_DIR$/../../../../../../Program Files/Java/jdk-15.0.2/caches/transforms-3/dcba5ebfbc6f8c793b6dd1a58145c803/transformed/play-services-places-placereport-17.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
