@@ -1,5 +1,6 @@
 package com.example.taxiapp
 
+import android.location.Geocoder
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.taxiapp.databinding.ActivityMapsBinding
@@ -10,6 +11,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import java.io.IOException
+import java.util.*
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -21,6 +24,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -55,13 +59,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     //var coordCount = count / 2
                     lat = coord
 
-                    println("lat $lat")
-                    println("long $long")
+                    //println("lat $lat")
+                    //println("long $long")
 
                     // lat long pair retrieved
                     // can convert
                     convertedCoord = LatLng(lat, long)
-                    println(convertedCoord)
+                    //println(convertedCoord)
                     gMap.addMarker(MarkerOptions().position(convertedCoord).title("Marker"))
                 }
             }
@@ -78,7 +82,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             //float   HUE_YELLOW
 
             // currentLocation should change to user's current location when code is up
-            var currentLocation = LatLng(1.3732, 103.9493) // Pasir Ris MRT for testing
+
+            //var currentLocation = LatLng(1.3732, 103.9493) // Pasir Ris MRT for testing
+
+            var currentLocation = LatLng(userLat, userLong) // current location
+            println("current loc " + currentLocation)
             gMap.addMarker(MarkerOptions().position(currentLocation).title("UserCurrentLocation")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
 
