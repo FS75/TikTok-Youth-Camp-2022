@@ -51,8 +51,9 @@ class MainActivity : AppCompatActivity() {
         //checkLocationPermission()
         //checkGPS()
 
-        getFeature()
+        getJson()
         generateMapForBtn()
+        refreshData()
     }
     private fun getCurrentLocation(){
         if(checkPermission()){
@@ -147,116 +148,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    //Juleus Stuff
-//    private fun checkLocationPermission(){
-//
-//        println("in check location permission")
-//
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-//            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//
-//            // permission granted
-
-//            //checkGPS()
-//        }
-//        else{
-//
-//            // permission denied
-//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 100)
-//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 100)
-//        }
-//    }
-//
-//    private fun checkGPS(){
-//
-//        println("in check gps")
-//
-//        locationRequest = LocationRequest.create()
-//        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-//        locationRequest.interval = 5000
-//        locationRequest.fastestInterval = 2000
-//
-//        val builder = LocationSettingsRequest.Builder()
-//            .addLocationRequest(locationRequest)
-//
-//        builder.setAlwaysShow(true)
-//
-//        val result = LocationServices.getSettingsClient(this.applicationContext)
-//            .checkLocationSettings(builder.build())
-//
-//        result.addOnCompleteListener { task ->
-//
-//            try {
-//
-//                println("gps on")
-//
-//                // when GPS is on
-//                val response = task.getResult(
-//                    ApiException::class.java
-//                )
-//
-//                println("getting user location")
-//                getUserLocation()
-//
-//
-//            } catch( e : ApiException){
-//
-//                println("gps off")
-//                // when GPS is off
-//                e.printStackTrace()
-//
-//                when (e.statusCode){
-//
-//                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try{
-//
-//                        // send request to enable GPS
-//                        val resolveApiException = e as ResolvableApiException
-//                        resolveApiException.startResolutionForResult(this, 200)
-//
-//                    } catch (sendIntentException : IntentSender.SendIntentException){
-//
-//                    }
-//                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
-//
-//                        // when setting changes are unavailable
-//
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun getUserLocation(){
-//
-//        println("in get user location")
-//
-//        fusedLocationProviderClient.lastLocation.addOnCompleteListener(this){ task ->
-//            val location: Location? = task.result
-//
-//            println("location " + location)
-//
-//            if (location != null){
-//
-//                try {
-//
-//                    println("in location valid")
-//                    //var geocoder = Geocoder(this, Locale.getDefault())
-//
-//                    userLat = location.latitude
-//                    userLong = location.longitude
-//
-//                    /*val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-//                    val addressLine = address[0].getAddressLine(0)*/
-//
-//                } catch (e : IOException) {
-//
-//                    e.printStackTrace()
-//                }
-//            }
-//        }
-//    }
-
-    private fun getFeature(){
+    private fun getJson(){
 
         val retrofitBuilder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -267,7 +159,7 @@ class MainActivity : AppCompatActivity() {
         val textView1 = findViewById<TextView>(R.id.txtId)
 
         //textView1.text = "CALL GET DATA"
-        val retrofitData = retrofitBuilder.getData2()
+        val retrofitData = retrofitBuilder.getData()
         //textView1.text = "AFTER GET DATA"
         retrofitData.enqueue(object : Callback<TaxiData?> {
             override fun onResponse(call: Call<TaxiData?>, response: Response<TaxiData?>) {
@@ -276,6 +168,7 @@ class MainActivity : AppCompatActivity() {
                 var count = 0
                 var retrievedTaxiCount = false
                 var taxiCount = "Available Taxis in SG: "
+                var timeStamp = ""
 
                 for(myData in responseBody.features){
                     coordList.add(myData.geometry.coordinates.toList())
@@ -285,6 +178,7 @@ class MainActivity : AppCompatActivity() {
                     if (!retrievedTaxiCount){
 
                         taxiCount += myData.properties.taxi_count.toString()
+                        timeStamp = myData.properties.timestamp
                     }
                 }
 
@@ -294,8 +188,7 @@ class MainActivity : AppCompatActivity() {
                     myStringBuilder.append("\n")
                 }
 
-                //textView1.text = myStringBuilder
-                textView1.text = taxiCount
+                textView1.text = taxiCount + "\nLast Updated: "+timeStamp
             }
 
             override fun onFailure(call: Call<TaxiData?>, t: Throwable) {
@@ -313,6 +206,18 @@ class MainActivity : AppCompatActivity() {
             //checkGPS()
             val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun refreshData(){
+
+        val refreshBtn = findViewById<Button>(R.id.refresh)
+
+        // on refresh button click
+        refreshBtn.setOnClickListener() {
+            println("Refresh button clicked")
+            coordList.clear()
+            getJson()
         }
     }
 }
