@@ -2,6 +2,7 @@ package com.example.taxiapp
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,19 +12,18 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import org.w3c.dom.Text
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var gMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private lateinit var currentLocation : LatLng
+    private lateinit var staticLocation : LatLng
 
     // Trying to draw sum markers
     open fun resizeMapIcons(
@@ -55,60 +55,88 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
 
         gMap = googleMap
-        drawMarkerOnMap(gMap)
-        var currentLocation = LatLng(userLat, userLong) // current location
-        var staticLocation = LatLng(1.3040612421100153, 103.83146976185485)
+        drawMarkersOnMap(gMap)
+        currentLocation = LatLng(userLat, userLong) // current location
+        staticLocation = LatLng(1.3040612421100153, 103.83146976185485)
         gMap.addMarker(MarkerOptions().position(staticLocation).title("UserCurrentLocation")
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
 
         // zoom onto user's current location
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(staticLocation, 17F))
+
+        // just for testing radius working or not
+        // drawCircleOnMap(LatLng(1.3040612421100153, 103.83146976185485))
+
     }
 
-    private fun drawMarkerOnMap(googleMap: GoogleMap){
+    private fun drawMarkersOnMap(googleMap: GoogleMap){
         var count = 0
         var lat = 0.0
         var long = 0.0
-        var convertedCoord = LatLng(0.0, 0.0)
-        for (coords in coordList[0]){
+        var convertedTaxiCoord = LatLng(0.0, 0.0)
 
-            for (coord in coords) {
+        for (taxiCoords in coordList[0]){
+
+            for (taxiCoord in taxiCoords) {
 
                 count += 1
 
                 // if count is odd
                 if (count % 2 != 0)
-                    long = coord
+                    long = taxiCoord
 
                 // if count is even
                 else {
-                    //var coordCount = count / 2
-                    lat = coord
+                    lat = taxiCoord
 
-                    //println("lat $lat")
-                    //println("long $long")
+                    // lat long pair retrieved, convert
+                    convertedTaxiCoord = LatLng(lat, long)
+                    android.location.Location.distanceBetween(1.3040612421100153, 103.83146976185485, lat, long, results)
 
-                    // lat long pair retrieved
-                    // can convert
-                    convertedCoord = LatLng(lat, long)
-                    //println(convertedCoord)
-                    //gMap.addMarker(MarkerOptions().position(convertedCoord).title("Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_local_taxi_24)))
-                    gMap.addMarker(
-                        MarkerOptions().position(convertedCoord).title("Taxi")
-                            .icon(
-                                BitmapDescriptorFactory.fromBitmap(
-                                    resizeMapIcons(
-                                        "taxi_icon",
-                                        150,
-                                        150
+                    if (results[0] < DISTANCE_AWAY_FROM_USER){
+
+                        gMap.addMarker(
+                            MarkerOptions().position(convertedTaxiCoord).title("Taxi")
+                                .icon(
+                                    BitmapDescriptorFactory.fromBitmap(
+                                        resizeMapIcons(
+                                            "taxi_icon",
+                                            150,
+                                            150
+                                        )
                                     )
                                 )
-                            )
-                    )
-                    //gMap.addMarker(MarkerOptions().position(convertedCoord).title("Taxi"))
+                        )
+                    }
+
+                    //println(convertedTaxiCoord)
+                    //gMap.addMarker(MarkerOptions().position(convertedTaxiCoord).title("Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_local_taxi_24)))
+                    //gMap.addMarker(MarkerOptions().position(convertedTaxiCoord).title("Taxi"))
                 }
             }
         }
+    }
+
+    // this function is just for testing whether the radius accurate or not
+    private fun drawCircleOnMap(point : LatLng){
+
+        var circleOptions = CircleOptions()
+
+        // set center coordinates of circle
+        circleOptions.center(point)
+        circleOptions.radius(500.0) // radius is in meters
+
+        // Border color of the circle
+        circleOptions.strokeColor(Color.BLACK);
+
+        // Fill color of the circle
+        circleOptions.fillColor(0x30ff0000);
+
+        // Border width of the circle
+        circleOptions.strokeWidth(2F);
+
+        // Adding the circle to the GoogleMap
+        gMap.addCircle(circleOptions);
     }
 
 }
