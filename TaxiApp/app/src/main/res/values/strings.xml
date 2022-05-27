@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">TaxiApp</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="tiktok_youth_camp_project">Tiktok Youth Camp Project</string>
+    <string name="available_taxis_in_sg">Available Taxis in SG:</string>
+    <string name="available_taxis_near_you">Available Taxis Near You:</string>
+    <string name="taxi_visibility_range">Taxi Visibility Range:</string>
+    <string name="view_map">VIEW MAP</string>
+    <string name="refresh">REFRESH</string>
+
 </resources>
